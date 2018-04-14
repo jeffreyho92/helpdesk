@@ -48,23 +48,30 @@ function BadgeStatus(props) {
 	}
 }
 
+var new_form = {
+	ID: "",
+	subject: "",
+	user: "",
+	engineer: "",
+	created: "",
+	priority: "",
+	status: "",
+	desc: "",
+	defect_type: "Hardware",
+	defect_subtype: "PC",
+	department: "",
+	asset_no: "",
+	asset_sn: ""
+}
+
 class Tickets extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			arr_tickets: this.props.arr_tickets.sort((a, b) => a.ID < b.ID),
-			arr_account: this.props.arr_account,
+			arr_tickets: this.props.param.arr_tickets.sort((a, b) => a.ID < b.ID),
+			arr_account: this.props.param.arr_account,
 			primary: false,
-			form: {
-				ID: "",
-				subject: "",
-				user: "",
-				engineer: "",
-				created: "",
-				priority: "",
-				status: "",
-				remark: ""
-			},
+			form: new_form,
 			toggleIndex: ""
 		};
 
@@ -90,7 +97,7 @@ class Tickets extends Component {
 			this.state.form.created = this.state.arr_tickets[index].created;
 			this.state.form.priority = this.state.arr_tickets[index].priority;
 			this.state.form.status = this.state.arr_tickets[index].status;
-			this.state.form.remark = this.state.arr_tickets[index].remark;
+			this.state.form.desc = this.state.arr_tickets[index].desc;
 		}
 		this.setState({
 			primary: !this.state.primary
@@ -119,16 +126,7 @@ class Tickets extends Component {
 
 		this.setState({
 			arr_tickets: this.state.arr_tickets,
-			form: {
-				ID: "",
-				subject: "",
-				user: "",
-				engineer: "",
-				created: "",
-				priority: "",
-				status: "",
-				remark: ""
-			}
+			form: new_form
 		});
 
 		localStorage.setItem("arr_tickets", JSON.stringify(this.state.arr_tickets));
@@ -138,16 +136,7 @@ class Tickets extends Component {
 		var arr = this.state.arr_tickets.filter(t => t.ID != this.state.form.ID);
 		this.setState({
 			arr_tickets: arr,
-			form: {
-				ID: "",
-				subject: "",
-				user: "",
-				engineer: "",
-				created: "",
-				priority: "",
-				status: "",
-				remark: ""
-			}
+			form: new_form
 		});
 		localStorage.setItem("arr_tickets", JSON.stringify(arr));
 		this.togglePrimaryClose();
@@ -310,10 +299,10 @@ class Tickets extends Component {
 
 							<FormGroup row>
 								<Col md="2">
-									<Label>Remark</Label>
+									<Label>Description</Label>
 								</Col>
 								<Col xs="12" md="4">
-									<Input type="textarea" value={this.state.form.remark} onChange={e => this.handleChange({ remark: e.target.value })} />
+									<Input type="textarea" value={this.state.form.desc} onChange={e => this.handleChange({ desc: e.target.value })} />
 								</Col>
 							</FormGroup>
 						</Form>

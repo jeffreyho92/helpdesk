@@ -63,28 +63,51 @@ var arr_tickets = [
   }
 ];
 
+var arr_subtype = [
+  { cat: 1, name: "PC" },
+  { cat: 1, name: "Laptop" },
+  { cat: 1, name: "Printer" },
+  { cat: 1, name: "Scanner" },
+  { cat: 1, name: "Projector" },
+  { cat: 1, name: "Others" },
+  { cat: 2, name: "System A" },
+  { cat: 2, name: "System B" },
+  { cat: 2, name: "System C" },
+  { cat: 2, name: "Others" }
+];
+
 class Full extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arr_account: [],
-      arr_tickets: []
+      param: {
+        arr_account: [],
+        arr_tickets: [],
+        arr_subtype: []
+      }
     };
   }
 
   componentWillMount() {
     if (localStorage.getItem("arr_account")) {
-      this.state.arr_account = JSON.parse(localStorage.getItem("arr_account"));
+      this.state.param.arr_account = JSON.parse(localStorage.getItem("arr_account"));
     } else {
-      this.state.arr_account = arr_account;
+      this.state.param.arr_account = arr_account;
       localStorage.setItem("arr_account", JSON.stringify(arr_account));
     }
 
     if (localStorage.getItem("arr_tickets")) {
-      this.state.arr_tickets = JSON.parse(localStorage.getItem("arr_tickets"));
+      this.state.param.arr_tickets = JSON.parse(localStorage.getItem("arr_tickets"));
     } else {
-      this.state.arr_tickets = arr_tickets;
+      this.state.param.arr_tickets = arr_tickets;
       localStorage.setItem("arr_tickets", JSON.stringify(arr_tickets));
+    }
+
+    if (localStorage.getItem("arr_subtype")) {
+      this.state.param.arr_subtype = JSON.parse(localStorage.getItem("arr_subtype"));
+    } else {
+      this.state.param.arr_subtype = arr_subtype;
+      localStorage.setItem("arr_subtype", JSON.stringify(arr_subtype));
     }
   }
 
@@ -102,12 +125,12 @@ class Full extends Component {
                 <Route
                   path="/tickets/create"
                   name="Create Ticket"
-                  component={props => <CreateTicket arr_account={this.state.arr_account} arr_tickets={this.state.arr_tickets} {...props} />}
+                  component={props => <CreateTicket param={this.state.param} {...props} />}
                 />
                 <Route
                   path="/tickets"
                   name="Tickets"
-                  component={props => <Tickets arr_account={this.state.arr_account} arr_tickets={this.state.arr_tickets} {...props} />}
+                  component={props => <Tickets param={this.state.param} {...props} />}
                 />
                 <Redirect from="/" to="/dashboard" />
               </Switch>

@@ -11,8 +11,9 @@ class CreateTicket extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			arr_tickets: this.props.arr_tickets,
-			arr_account: this.props.arr_account,
+			arr_tickets: this.props.param.arr_tickets,
+			arr_account: this.props.param.arr_account,
+			arr_subtype: this.props.param.arr_subtype,
 			form: {
 				ID: "",
 				subject: "",
@@ -21,18 +22,43 @@ class CreateTicket extends Component {
 				created: "",
 				priority: "",
 				status: "",
-				remark: ""
-			}
+				desc: "",
+				defect_type: "Hardware",
+				defect_subtype: "PC",
+				department: "",
+				asset_no: "",
+				asset_sn: ""
+			},
+			subtype: []
 		};
 
 		this.createForm = this.createForm.bind(this);
+		this.refreshSubType = this.refreshSubType.bind(this);
 	}
 
 	componentWillMount() {
 		console.log("componentWillMount");
+
+		this.refreshSubType();
+	}
+
+	refreshSubType(){
+		console.log('refreshSubType ' + this.state.form.defect_type)
+		var arr = []; 
+		this.state.arr_subtype.map((type) => {
+			if (this.state.form.defect_type == "Hardware" && type.cat == 2) {
+				arr.push(type.name);
+			}else if (this.state.form.defect_type == "Software" && type.cat == 1) {
+				arr.push(type.name);
+			}
+		});
+		this.setState({ subtype: arr });
+		console.log(this.state.form)
 	}
 
 	handleChange(newPartialInput) {
+		console.log(newPartialInput)
+
 		this.setState(state => ({
 			...state,
 			form: {
@@ -40,6 +66,12 @@ class CreateTicket extends Component {
 				...newPartialInput
 			}
 		}));
+		
+		//console.log(this.state.form)
+
+		if(newPartialInput.defect_type){
+			this.refreshSubType();
+		}
 	}
 
 	createForm() {
@@ -54,17 +86,7 @@ class CreateTicket extends Component {
 		this.state.arr_tickets.push(this.state.form);
 
 		this.setState({
-			arr_tickets: this.state.arr_tickets,
-			form: {
-				ID: "",
-				subject: "",
-				user: "",
-				engineer: "",
-				created: "",
-				priority: "",
-				status: "",
-				remark: ""
-			}
+			arr_tickets: this.state.arr_tickets
 		});
 
 		localStorage.setItem("arr_tickets", JSON.stringify(this.state.arr_tickets));
@@ -102,6 +124,43 @@ class CreateTicket extends Component {
 													}
 												})}
 											</Input>
+										</Col>
+									</FormGroup>
+
+									<FormGroup row>
+										<Col md="2">
+											<Label>Defect Type</Label>
+										</Col>
+										<Col xs="12" md="4">
+											<Input type="select" defaultValue={this.state.form.defect_type} onChange={e => this.handleChange({ defect_type: e.target.value })}>
+												<option>Hardware</option>
+												<option>Software</option>
+											</Input>
+										</Col>
+										<Col md="2">
+											<Label>Defect Sub-type</Label>
+										</Col>
+										<Col xs="12" md="4">
+											<Input type="select" defaultValue={this.state.form.defect_subtype} onChange={e => this.handleChange({ defect_subtype: e.target.value })}>
+											{this.state.subtype.map((type, index) => {
+												return <option key={index}>{type}</option>
+											})}
+											</Input>
+										</Col>
+									</FormGroup>
+
+									<FormGroup row>
+										<Col md="2">
+											<Label>Asset number</Label>
+										</Col>
+										<Col xs="12" md="4">
+											<Input type="text" value={this.state.form.asset_no} />
+										</Col>
+										<Col md="2">
+											<Label>Hardware serial number</Label>
+										</Col>
+										<Col xs="12" md="4">
+											<Input type="text" value={this.state.form.asset_sn} />
 										</Col>
 									</FormGroup>
 
@@ -151,10 +210,16 @@ class CreateTicket extends Component {
 
 									<FormGroup row>
 										<Col md="2">
-											<Label>Remark</Label>
+											<Label>Department</Label>
 										</Col>
 										<Col xs="12" md="4">
-											<Input type="textarea" value={this.state.form.remark} onChange={e => this.handleChange({ remark: e.target.value })} />
+											<Input type="text" value={this.state.form.department} />
+										</Col>
+										<Col md="2">
+											<Label>Description</Label>
+										</Col>
+										<Col xs="12" md="4">
+											<Input type="textarea" value={this.state.form.desc} onChange={e => this.handleChange({ desc: e.target.value })} />
 										</Col>
 									</FormGroup>
 								</Form>
