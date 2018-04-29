@@ -18,7 +18,7 @@ var arr_account = [
     username: "alien",
     name: "Alien",
     department: "Department A",
-    email: "alien@gmail.com",
+    email: "jeffreyho92@gmail.com",
     password: "123",
     role: 10
   },
@@ -26,7 +26,7 @@ var arr_account = [
     username: "walker",
     name: "Walker",
     department: "Department B",
-    email: "walker@gmail.com",
+    email: "jeffreyho92@gmail.com",
     password: "123",
     role: 10
   },
@@ -34,7 +34,7 @@ var arr_account = [
     username: "eng1",
     name: "Eng1",
     department: "",
-    email: "eng1@gmail.com",
+    email: "jeffreyho92@gmail.com",
     password: "123",
     role: 20
   },
@@ -42,7 +42,7 @@ var arr_account = [
     username: "eng2",
     name: "Eng2",
     department: "",
-    email: "eng2@gmail.com",
+    email: "jeffreyho92@gmail.com",
     password: "123",
     role: 20
   },
@@ -50,7 +50,7 @@ var arr_account = [
     username: "helpdesk",
     name: "HELPDESK",
     department: "",
-    email: "helpdesk@gmail.com",
+    email: "jeffreyho92@gmail.com",
     password: "123",
     role: 50
   },
