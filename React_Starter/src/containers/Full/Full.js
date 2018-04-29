@@ -10,56 +10,124 @@ import Footer from "../../components/Footer/";
 import Dashboard from "../../views/Dashboard/";
 import Tickets from "../../views/Tickets/List/";
 import CreateTicket from "../../views/Tickets/Create/";
+import Account from "../../views/Account/List/";
+import CreateAccount from "../../views/Account/Create/";
 
 var arr_account = [
   {
-    username: "Alien",
+    username: "alien",
+    name: "Alien",
+    department: "Department A",
+    email: "alien@gmail.com",
+    password: "123",
     role: 10
   },
   {
-    username: "Walker",
+    username: "walker",
+    name: "Walker",
+    department: "Department B",
+    email: "walker@gmail.com",
+    password: "123",
     role: 10
   },
   {
-    username: "Faded",
-    role: 10
-  },
-  {
-    username: "Eng1",
+    username: "eng1",
+    name: "Eng1",
+    department: "",
+    email: "eng1@gmail.com",
+    password: "123",
     role: 20
   },
   {
-    username: "Eng2",
+    username: "eng2",
+    name: "Eng2",
+    department: "",
+    email: "eng2@gmail.com",
+    password: "123",
     role: 20
+  },
+  {
+    username: "helpdesk",
+    name: "HELPDESK",
+    department: "",
+    email: "helpdesk@gmail.com",
+    password: "123",
+    role: 50
+  },
+  {
+    username: "admin",
+    name: "Admin",
+    department: "",
+    email: "",
+    password: "123",
+    role: 90
   }
 ];
 var arr_tickets = [
   {
     ID: "201804-00001",
     subject: "Printer cannot print",
-    user: "Alien",
-    engineer: "Eng1",
-    created: "20180410",
+    user: "alien",
+    engineer: "eng1",
     priority: "Urgent",
-    status: "New"
+    status: "New",
+    defect_subtype: "PC",
+    defect_type: "Hardware",
+    department: "Department B"
   },
   {
     ID: "201804-00002",
     subject: "Printer cannot print",
-    user: "Walker",
-    engineer: "Eng2",
-    created: "20180410",
+    user: "walker",
+    engineer: "eng2",
     priority: "Urgent",
-    status: "Pending"
+    status: "Pending",
+    defect_subtype: "PC",
+    defect_type: "Hardware",
+    department: "Department A"
   },
   {
     ID: "201804-00003",
     subject: "Printer cannot print",
-    user: "Faded",
-    engineer: "Eng2",
-    created: "20180410",
+    user: "alien",
+    engineer: "eng2",
     priority: "Normal",
-    status: "Completed"
+    status: "Completed",
+    defect_subtype: "PC",
+    defect_type: "Hardware",
+    department: "Department C"
+  }
+];
+var arr_tickets_action = [
+  {
+    ID: "201804-00001",
+    datetime: "2018-04-15T15:36:50+08:00",
+    action: 1
+  },
+  {
+    ID: "201804-00002",
+    datetime: "2018-04-15T15:36:50+08:00",
+    action: 1
+  },
+  {
+    ID: "201804-00003",
+    datetime: "2018-04-15T15:36:50+08:00",
+    action: 1
+  },
+  {
+    ID: "201804-00002",
+    datetime: "2018-04-15T15:36:50+08:00",
+    action: 2
+  },
+  {
+    ID: "201804-00003",
+    datetime: "2018-04-15T15:36:50+08:00",
+    action: 2
+  },
+  {
+    ID: "201804-00003",
+    datetime: "2018-04-15T15:36:50+08:00",
+    action: 3
   }
 ];
 
@@ -79,42 +147,35 @@ var arr_subtype = [
 class Full extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      param: {
-        arr_account: [],
-        arr_tickets: [],
-        arr_subtype: []
-      }
-    };
+    this.state = {};
   }
 
   componentWillMount() {
-    if (localStorage.getItem("arr_account")) {
-      this.state.param.arr_account = JSON.parse(localStorage.getItem("arr_account"));
-    } else {
-      this.state.param.arr_account = arr_account;
+    if (!localStorage.getItem("arr_account")) {
       localStorage.setItem("arr_account", JSON.stringify(arr_account));
     }
 
-    if (localStorage.getItem("arr_tickets")) {
-      this.state.param.arr_tickets = JSON.parse(localStorage.getItem("arr_tickets"));
-    } else {
-      this.state.param.arr_tickets = arr_tickets;
+    if (!localStorage.getItem("arr_subtype")) {
+      localStorage.setItem("arr_subtype", JSON.stringify(arr_subtype));
+    }
+
+    if (!localStorage.getItem("arr_tickets")) {
       localStorage.setItem("arr_tickets", JSON.stringify(arr_tickets));
     }
 
-    if (localStorage.getItem("arr_subtype")) {
-      this.state.param.arr_subtype = JSON.parse(localStorage.getItem("arr_subtype"));
-    } else {
-      this.state.param.arr_subtype = arr_subtype;
-      localStorage.setItem("arr_subtype", JSON.stringify(arr_subtype));
+    if (!localStorage.getItem("arr_tickets_action")) {
+      localStorage.setItem("arr_tickets_action", JSON.stringify(arr_tickets_action));
+    }
+
+    if (!localStorage.getItem("login_session")) {
+      this.props.history.push("/login");
     }
   }
 
   render() {
     return (
       <div className="app">
-        <Header />
+        <Header {...this.props} />
         <div className="app-body">
           <Sidebar {...this.props} />
           <main className="main">
@@ -122,17 +183,11 @@ class Full extends Component {
             <Container fluid>
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard} />
-                <Route
-                  path="/tickets/create"
-                  name="Create Ticket"
-                  component={props => <CreateTicket param={this.state.param} {...props} />}
-                />
-                <Route
-                  path="/tickets"
-                  name="Tickets"
-                  component={props => <Tickets param={this.state.param} {...props} />}
-                />
-                <Redirect from="/" to="/dashboard" />
+                <Route path="/tickets/create" name="Create Ticket" component={CreateTicket} />
+                <Route path="/tickets" name="Tickets" component={Tickets} />
+                <Route path="/account/create" name="Create Account" component={CreateAccount} />
+                <Route path="/account" name="Account" component={Account} />
+                <Redirect from="/" to="/login" />
               </Switch>
             </Container>
           </main>

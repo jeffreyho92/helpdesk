@@ -3,6 +3,15 @@ import React, { Component } from "react";
 import { Nav, NavItem, NavbarToggler, NavbarBrand, Button } from "reactstrap";
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: ""
+    };
+
+    this.logout = this.logout.bind(this);
+  }
+
   sidebarToggle(e) {
     e.preventDefault();
     document.body.classList.toggle("sidebar-hidden");
@@ -23,6 +32,21 @@ class Header extends Component {
     document.body.classList.toggle("aside-menu-hidden");
   }
 
+  componentWillMount() {
+    if (localStorage.getItem("login_session")) {
+      this.setState({
+        username: JSON.parse(localStorage.getItem("login_session")).name
+      });
+    } else {
+      this.props.history.push("/login");
+    }
+  }
+
+  logout() {
+    localStorage.removeItem("login_session");
+    this.props.history.push("/login");
+  }
+
   render() {
     return (
       <header className="app-header navbar">
@@ -32,11 +56,23 @@ class Header extends Component {
         {/*
         <NavbarBrand href="#" />
         */}
-          &emsp;<b>ICT HELPDESK</b>
+        &emsp;<b>ICT HELPDESK</b>
         <NavbarToggler className="d-md-down-none mr-auto" onClick={this.sidebarToggle}>
           <span className="navbar-toggler-icon" />
         </NavbarToggler>
-        USERNAME &emsp; &emsp;
+        {this.state.username}
+        &emsp;
+        <Button
+          outline
+          size="sm"
+          color="secondary"
+          onClick={event => {
+            this.logout();
+          }}
+        >
+          Logout
+        </Button>
+        &emsp; &emsp;
         {/*
         <NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>
           <span className="navbar-toggler-icon"></span>

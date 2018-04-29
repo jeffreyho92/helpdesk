@@ -17,11 +17,27 @@
 // Custom styles
 @import "custom";
 .text-vertical-middle {
-    margin: auto;
+	margin: auto;
 }
 .span-status {
-    font-size: 1.3em;
+	font-size: 1.3em;
 }
 .hand-cursor {
-    cursor: pointer;
+	cursor: pointer;
+}
+.row_hr {
+	padding-bottom: 2em;
+}
+
+hr {
+	margin-bottom: 0em !important;
+}
+.hidden {
+	display: none;
+}
+.gallery {
+	height: 20em;
+}
+.gallery img {
+	max-height: 100%;
 }
