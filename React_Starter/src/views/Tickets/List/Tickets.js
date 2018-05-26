@@ -40,6 +40,18 @@ function BadgeStatus(props) {
 				<span className="span-status">Pending</span>
 			</Badge>
 		);
+	} else if (props.status == "KIV") {
+		return (
+			<Badge className="mr-1" color="primary">
+				<span className="span-status">KIV</span>
+			</Badge>
+		);
+	} else if (props.status == "Issue") {
+		return (
+			<Badge className="mr-1" color="primary">
+				<span className="span-status">Issue</span>
+			</Badge>
+		);
 	} else if (props.status == "Completed") {
 		return (
 			<Badge className="mr-1" color="success">
@@ -275,7 +287,16 @@ class Tickets extends Component {
 			form: Object.create(new_form)
 		});
 
-		localStorage.setItem("arr_tickets", JSON.stringify(arr));
+		var arr3 = [];
+		JSON.parse(localStorage.getItem("arr_tickets")).map(t => {
+			if (t.ID == this.state.form.ID) {
+				arr3.push(update_value);
+			} else {
+				arr3.push(t);
+			}
+		});
+
+		localStorage.setItem("arr_tickets", JSON.stringify(arr3));
 		localStorage.setItem("arr_tickets_action", JSON.stringify(arr2));
 
 		var id = this.state.form.ID;
@@ -440,6 +461,8 @@ class Tickets extends Component {
 												<option value="All">All</option>
 												<option value="New">New</option>
 												<option value="Pending">Pending</option>
+												<option value="KIV">KIV</option>
+												<option value="Issue">Issue</option>
 												<option value="Completed">Completed</option>
 											</Input>
 										</InputGroup>
@@ -738,12 +761,14 @@ class Tickets extends Component {
 								<Col xs="12" md="4">
 									<Input
 										type="select"
-										disabled={this.state.user_role < 50 ? true : false}
+										disabled={this.state.user_role < 20 ? true : false}
 										defaultValue={this.state.form.status}
 										onChange={e => this.handleChange({ status: e.target.value })}
 									>
 										<option>New</option>
 										<option>Pending</option>
+										<option>KIV</option>
+										<option>Issue</option>
 										<option>Completed</option>
 									</Input>
 								</Col>
